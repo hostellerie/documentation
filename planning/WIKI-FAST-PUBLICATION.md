@@ -30,3 +30,17 @@ Never deploy the raw `wiki-preview-local` folder as a public alternative to the 
 - The fork Pages workflow on main explicitly checks out `prototype/dual-output-222`. Updating this inventory branch alone **does not deploy** the recovered contents.
 
 Next: collect a small, sanitized pilot set of actual public Wiki article bodies from the user's local Chromebook extraction, then convert/verify them into Markdown in the existing dual-output architecture.
+
+## Concrete handoff: 14-page modernization pilot
+
+The offline extraction of all 351 nonredirect Wiki pages succeeded on the contributor's Chromebook. To work on the *content* rather than title-only metadata, a deliberately scoped review exporter was added at `tools/wiki_review_pack.py`.
+
+Run from `~/geeklog-wiki-migration`:
+
+```bash
+curl -fL -o wiki_review_pack.py https://raw.githubusercontent.com/hostellerie/documentation/docs/wiki-recovery-inventory-2024/tools/wiki_review_pack.py
+python3 wiki_review_pack.py --catalog wiki-2024-review.csv --preview wiki-preview-local
+unzip -l wiki-review-pilot-14.zip
+```
+
+This creates 14 original `.wiki` text files, a manifest and a safety warning. **It is not yet Markdown and is not deployable**; manually inspect for private information and licensing before sharing. Review contents against the installed Geeklog source, then build validated topic-level Markdown with URL/anchor mappings, never an unreviewed 351-page bulk import.
