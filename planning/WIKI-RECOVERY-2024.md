@@ -55,3 +55,27 @@ The 9 ns0 redirect titles as reported: `Category:MediaWiki_User's_Guide`, `Media
 Run `tools/wiki_catalog_review.py` locally against `wiki-2024-catalogue.csv`. It will write an offline **sanitized review CSV** and print summary counts. Inspect the CSV and provide it via the conversation if help with manual classification is desired. **Do not commit raw SQL or unreviewed article text.**
 
 Keep this branch separate from `docs/installation-release-audit-222` / PR #4; one scoped PR for Wiki recovery once verified.
+
+## Review of full 360-row CSV — 2026-11-04
+
+The user supplied the **actual sanitized review CSV** with 360 rows and all nine redirect titles. A *title-only* editorial categorization pass was completed locally, generating an enriched CSV and LibreOffice-compatible four-sheet workbook for user download; neither the CSV nor the workbook nor raw content was committed to this repository.
+
+Provisional categories (sum = **360**):
+
+| Proposed bucket | Number |
+| --- | ---: |
+| Historical / older versions | 114 |
+| Administration and security | 66 |
+| Development: plugins and APIs | 49 |
+| Development: data and services | 25 |
+| Installation and migration | 22 |
+| Development: themes and templates | 18 |
+| Plugin guides | 17 |
+| Still needs manual classification | 15 |
+| User documentation | 14 |
+| Community / history | 11 |
+| Historical redirects | 9 |
+
+Exactly **53** titles were marked as first-pass technical review, **9** as redirect-resolution tasks; classification and migration priority are **editorial suggestions inferred from titles**, not validation of actual article content, current APIs, or licensing. A further 114 were flagged as possibly historical, **not** approved for removal. Ambiguous titles remain for manual reading.
+
+**Next verification gates:** resolve the nine actual `redirect` table targets, extract only the latest **public** Wiki page content into a quarantined offline review set, compare with current Geeklog sources and existing documentation, and clear licensing/privacy before publishing text. Avoid uploading backup SQL or blindly publishing content to GitHub.
