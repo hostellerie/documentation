@@ -1,17 +1,32 @@
-# Fast path to an accessible Geeklog Wiki archive
+# Single modern Geeklog documentation — publication plan
 
-The original 2024 Wiki dump is available only on the contributor's Chromebook, not in this repository. Do not commit or publish the archive, SQL, passwords, user tables, or all 360 pages without review.
+## Decision, 2026-11-04
 
-## Release strategy
+**One maintained documentation, not a public legacy archive.** The historical MediaWiki backups and locally generated HTML are offline sources for content recovery only.
 
-1. **Local read-only preview**: select 14 technical articles using `page_latest → revision.rev_text_id → text.old_id` and generate static HTML with escaped raw wikitext. This verifies extraction without executing a historical MediaWiki install. The initial preview is **not** a full wikitext renderer and is **not yet suitable for public documentation**.
-2. **Expand coverage**: run the same local extraction for 351 non-redirect historical namespace-0 articles, keeping 9 redirects in a separate mapping. Review content for private information, outdated instructions and licensing. Resolve 2024 redirect targets via `redirect.rd_from` and page ID. The 155 non-main-namespace records need independent selection, not automatic release.
-3. **Public searchable legacy snapshot**: once reviewed, publish safe static archival pages under a versioned `legacy-wiki/` URL with prominent historical status, navigation, cross-page links, and search/index, preserving historical titles where possible. Test that all outgoing links and templates are either mapped or visibly marked unsupported. Never deploy this snapshot as current instructions.
-4. **Modern docs**: migrate high-value verified articles to Markdown under topic folders; keep existing Geeklog 2.2.2 HTML help URL/fragment compatibility. Prefer one Markdown source to generate both online and embedded help.
-5. **Deploy**: fork publishing workflow currently checks out `prototype/dual-output-222` even if triggered from other branches; incorporate vetted legacy output into that build in a separate, reviewed change. Confirm deployment via Actions and published URL before announcing it as live.
+**One reviewed Markdown source** feeds two required outputs:
+- The searchable online Geeklog documentation on GitHub Pages.
+- Embedded HTML documentation for Geeklog distributions, maintaining existing `docs/english/` help URLs and anchors.
 
-## Current status
+Never deploy the raw `wiki-preview-local` folder as a public alternative to the maintained documentation.
 
-360 Wiki 2024 namespace-0 pages inventoried; 9 redirects. The user's CSV reviewed with 53 proposed technical-first pages; title-based classification only. Source texts have not yet been uploaded, analyzed, verified, or published. No GitHub Pages deployment is implied by this plan.
+## Extraction verified on contributor's Chromebook
 
-**Immediate next action**: run the separately provided local extraction utility against the ZIP and check it retrieves all 14 requested pages. Report failures of unsupported SQL formats or storage flags rather than silently dropping content.
+2024 backup: 360 namespace-0 pages, 9 redirects. Latest-revision IDs of all 360 titles agree with 2025. The local `wiki_preview.py` has successfully produced an initial 14 pages and then **351 non-redirect HTML previews** via `--all`. They contain raw, unrendered historical Wiki markup; they have **not** yet been verified or modernized.
+
+## Migration stages
+
+1. Select high-value pages from the 351 recovered topics: plugin API, database schema, configuration, themes, caching, Webservices, installation and admin help.
+2. Extract the selected public wikitext for offline review, excluding user tables, sensitive material, and private details. Check license and attribution.
+3. Compare with existing Geeklog 2.2.2 embedded docs and prototype Markdown. Merge and modernize useful content; do not bulk-import 351 outdated pages.
+4. Build topic-based English Markdown, including version caveats and verified code examples; resolve all 9 Wiki redirects to their true targets for link mapping.
+5. Generate **both** online and embedded HTML from the canonical Markdown. Validate existing links/anchors, site navigation, internal links, search and code snippets.
+6. Publish the same documentation site incrementally. No second legacy Wiki site. Review and merge in a dedicated PR, independently of installation PR #4.
+
+## Status and next gate
+
+- Title-level review inventory exists; 53 proposed technical priorities, 9 redirects.
+- Actual article bodies have not been received for editorial review; do not claim publication or content validation.
+- The fork Pages workflow on main explicitly checks out `prototype/dual-output-222`. Updating this inventory branch alone **does not deploy** the recovered contents.
+
+Next: collect a small, sanitized pilot set of actual public Wiki article bodies from the user's local Chromebook extraction, then convert/verify them into Markdown in the existing dual-output architecture.
