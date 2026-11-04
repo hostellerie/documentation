@@ -1,0 +1,35 @@
+name: Modernized Wiki documentation pilot
+on:
+  push:
+    branches:
+      - docs/wiki-recovery-inventory-2024
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Markdown renderer
+        run: python -m pip install Markdown==3.10
+      - name: Build searchable site and matching embedded help
+        run: python tools/build_modern_pilot.py
+      - name: Inspect artifacts
+        run: |
+          test -f dist/modern-online/search-index.json
+          test -f dist/modern-online/development/plugin-api/index.html
+          test -f dist/modern-embedded/public_html/docs/english/modern/development/plugin-api/index.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: geeklog-modern-web-pilot
+          path: dist/modern-online/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: geeklog-modern-embedded-pilot
+          path: dist/modern-embedded/
+          if-no-files-found: error
